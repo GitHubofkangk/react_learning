@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>2_react生命周期</title>
+</head>
+
+<body>
+
+    <!-- 准备好的一个“容器”。 -->
+    <div id="test"></div>
+
+    <!-- 引入react核心库 -->
+    <script type="text/javascript" src="../js/react.development.js"></script>
+    <!-- 引入react-dom, 用于支持操作虚拟DOM -->
+    <script type="text/javascript" src="../js/react-dom.development.js"></script>
+    <!-- 引入babel，用于将jsx转换为js -->
+    <script type="text/javascript" src="../js/babel.min.js"></script>
+
+    <!-- jsx脚本 -->
+    <script type="text/babel">
+        /*
+        1. 初始化阶段: 由ReactDOM.render()触发---初次渲染
+                1.	constructor()
+                2.	componentWillMount()
+                3.	render()
+                4.	componentDidMount()     ====> 常用
+                                    一般在这个钩子中，做一些初始化的事。例如，开启定时器，发送网络请求，订阅消息
+        2. 更新阶段: 由组件内部this.setSate()或父组件重新render触发
+                1.	shouldComponentUpdate()
+                2.	componentWillUpdate()
+                3.	render()        ====> 必须使用
+                4.	componentDidUpdate()
+        3. 卸载组件: 由ReactDOM.unmountComponentAtNode()触发
+                1.	componentWillUnmount()  ====> 常用
+                                    一般在这个钩子中，做一些收尾的事。例如：关闭定时器、取消订阅消息
+        */
+
+
+        // 创建组件
+        class Count extends React.Component {
+            // 构造器，也是钩子函数，最先调用
+            constructor(props) {
+                console.log('Count-constructor')
+                super(props)
+            }
+
+            // // 初始化状态，可以在构造器中初始化
+            state = { count: 0 }
+
+            // 以下为回调
+            // 加1按钮的回调
+            add = () => {
+                // 获取状态
+                const { count } = this.state
+                // 更新状态
+                this.setState({ count: count + 1 })
+            }
+
+            // 卸载按钮的回调
+            death = () => {
+                ReactDOM.unmountComponentAtNode(document.getElementById('test'))
+            }
+
+            // 强制更新的回调
+            force = () => {
+                this.forceUpdate()  // 不经过阀门
+            }
+
+            // 以下全为生命周期回调函数（钩子函数）
+            // 组件将要挂载
+            componentWillMount() {
+                console.log('Count-componentWillMount')
+            }
+
+            // 组件在页面显示
+            render() {
+                console.log('Count-render')
+                return (
+                    <div>
+                        <h2>当前求和为：{this.state.count}</h2>
+                        <button onClick={this.add}>点我+1</button>
+                        <button onClick={this.death}>卸载组件</button>
+                        <button onClick={this.force}>不关阀门，强制更新</button>
+
+                    </div>
+                )
+            }
+
+            // 组件完成挂载
+            componentDidMount() {
+                console.log('Count-componentDidMount')
+            }
+
+            // 组件将要卸载
+            componentWillUnmount() {
+                console.log('Count-componentWillUnmount')
+            }
+
+            // 控制组件更新的“阀门”
+            shouldComponentUpdate() {
+                console.log('Count-shouldComponentUpdate')
+                // 如果写这个钩子，就必须有布尔返回值。如果为false，阻断页面更新。
+                return true
+            }
+
+            // 组件将要更新的钩子
+            componentWillUpdate() {
+                console.log('Count-componentWillUpdate')
+            }
+
+            // 组件更新完毕的钩子
+            componentDidUpdate() {
+                console.log('Count-componentDidUpdate')
+            }
+        }
+
+        // 父组件
+        class FatherComponent extends React.Component {
+            // 初始化状态
+            state = { carName: '奔驰' }
+
+            // 按钮回调
+            changeCar = () => {
+                this.setState({ carName: '奥拓' })
+            }
+
+            render() {
+                return (
+                    <div>
+                        <h2>我是Father</h2>
+                        <button onClick={this.changeCar}>换车</button>
+                        <h2>以下是子组件</h2>
+                        {/*在父组件中，调用子组件，下面的代码，相当于实例化一个子组件，因此也是可以传入props*/}
+                        <ChildComponent carName={this.state.carName} />
+                    </div>
+                )
+            }
+        }
+
+        // 子组件
+        class ChildComponent extends React.Component {
+            // 钩子函数
+            // 子组件接收到新的props时
+            componentWillReceiveProps(props) {   // 可以接收参数props
+                console.log("Child --- componentWillReceiveProps", props)
+            }
+
+            // 组件更新的“阀门”
+            shouldComponentUpdate() {
+                console.log('Child --- shouldComponentUpdate')
+                return true
+            }
+
+            // 将要更新组件时
+            componentWillUpdate() {
+                console.log('Child --- componentWillUpdate')
+            }
+
+            render() {
+                return (
+                    <div>
+                        <h2>我是Child, 我的车为：{this.props.carName}</h2>
+                    </div>
+                )
+            }
+        }
+
+        // 渲染组件到页面
+        ReactDOM.render(<FatherComponent />, document.getElementById('test'))
+    </script>
+
+</html>

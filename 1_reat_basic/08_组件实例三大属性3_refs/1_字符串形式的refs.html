@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>1_字符串形式的refs</title>
+</head>
+
+<body>
+
+    <!-- 准备好的一个“容器”。 -->
+    <div id="test"></div>
+
+    <!-- 引入react核心库 -->
+    <script type="text/javascript" src="../js/react.development.js"></script>
+    <!-- 引入react-dom, 用于支持操作虚拟DOM -->
+    <script type="text/javascript" src="../js/react-dom.development.js"></script>
+    <!-- 引入babel，用于将jsx转换为js -->
+    <script type="text/javascript" src="../js/babel.min.js"></script>
+
+    <!-- jsx脚本 -->
+    <script type="text/babel">
+        // 创建组件
+        class Demo extends React.Component {
+            // 点击右侧按钮显示数据
+            showData = () => {
+                const { input1 } = this.refs    // 获取对象input1
+                alert(input1.value)
+            }
+
+            // 失去焦点显示数据
+            showData2 = () => {
+                const { input2 } = this.refs
+                alert(input2.value)
+            }
+            // 字符型形式的refs不推荐，因为效率不高，后面版本可能会弃用。
+            // 除了字符串形式，还有回调函数形式、createRefs
+            render() {
+                return (
+                    <div>
+                        <input ref="input1" type="text" placeholder="点击右侧按钮显示数据" />&nbsp;
+                        <button onClick={this.showData}>点击我显示左侧数据</button>&nbsp;
+                        <input ref="input2" onBlur={this.showData2} type="text" placeholder="失去焦点显示数据" />
+                    </div>
+                )
+            }
+        }
+        /*
+        html语法：
+            1. input输入框标签，属性：type输入类型，placeholder默认文本内容。
+            2. button按钮标签，属性onclick绑点点击事件
+        */
+
+        // 渲染组件到页面
+        ReactDOM.render(<Demo />, document.getElementById('test'))
+    </script>
+
+</html>

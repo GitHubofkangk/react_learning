@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>1_高级函数_函数柯里化</title>
+</head>
+
+<body>
+
+    <!-- 准备好的一个“容器”。 -->
+    <div id="test"></div>
+
+    <!-- 引入react核心库 -->
+    <script type="text/javascript" src="../js/react.development.js"></script>
+    <!-- 引入react-dom, 用于支持操作虚拟DOM -->
+    <script type="text/javascript" src="../js/react-dom.development.js"></script>
+    <!-- 引入babel，用于将jsx转换为js -->
+    <script type="text/javascript" src="../js/babel.min.js"></script>
+
+    <!-- jsx脚本 -->
+    <script type="text/babel">
+        //#region 
+        /*
+        高阶函数：如果一个函数符合下面2个规范中的任何一个，那该函数就是高阶函数。
+                1.若A函数，接收的参数是一个函数，那么A就可以称之为高阶函数。
+                2.若A函数，调用的返回值依然是一个函数，那么A就可以称之为高阶函数。
+                常见的高阶函数有：Promise、setTimeout、arr.map()等等
+        函数的柯里化：通过函数调用继续返回函数的方式，实现多次接收参数最后统一处理的函数编码形式。
+                        function sum(a){
+                            return(b)=>{
+                                return (c)=>{
+                                    return a+b+c
+                                }
+                            }
+                        }
+        */
+        //#endregion
+        // 创建组件
+        class Login extends React.Component {
+            // 初始化状态state
+            state = { username: '', password: '' }  // 对象中的key，固定为字符串，即使传入的没有引号，也当作字符串处理
+
+            // 使用高级函数（柯里化，返回值是一个函数的函数）实现多个事件函数，调用一个回调函数
+            saveFormDate = (dateType) => {
+                return (event) => {     // 返回一个接收参数的箭头函数，作为onChange的回调
+                    // 将传入的dateType作为状态的key，更新state。
+                    this.setState({ [dateType]: event.target.value })   // dateType不可直接放入对象中，当作key。应当是取出变量dateType中的值。
+                }
+            }
+
+            // 处理提交表单
+            handleSubmit = (event) => {
+                event.preventDefault()
+            }
+
+            render() {
+                return (
+                    <form action="https://wwww.baidu.com" onSubmit={this.handleSubmit}>
+                        用户名：<input onChange={this.saveFormDate('username')} type="text" />
+                        密码：<input onChange={this.saveFormDate('password')} type="password" />
+                        <button>登录</button>
+                    </form>
+                )
+            }
+        }
+
+        // 渲染组件
+        ReactDOM.render(<Login />, document.getElementById('test'))
+    </script>
+
+</html>

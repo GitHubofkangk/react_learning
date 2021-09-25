@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>3_回调refs中执行次数问题</title>
+</head>
+
+<body>
+
+    <!-- 准备好的一个“容器”。 -->
+    <div id="test"></div>
+
+    <!-- 引入react核心库 -->
+    <script type="text/javascript" src="../js/react.development.js"></script>
+    <!-- 引入react-dom, 用于支持操作虚拟DOM -->
+    <script type="text/javascript" src="../js/react-dom.development.js"></script>
+    <!-- 引入babel，用于将jsx转换为js -->
+    <script type="text/javascript" src="../js/babel.min.js"></script>
+
+    <!-- jsx脚本 -->
+    <script type="text/babel">
+        // 创建组件
+        class Demo extends React.Component {
+            /*
+                React.createRef调用后可以返回一个容器，该容器可以存储被ref所标识的节点,该容器是“专人专用”的
+             */
+            myRef = React.createRef()
+
+            // 设置state属性
+            state = { isHot: true }
+
+            // 点击右侧按钮显示数据
+            showData = () => {
+
+                alert(this.myRef.current.value)     // myRef:{current:input}
+            }
+
+            // 失去焦点显示数据
+            showData2 = () => {
+                const { input2 } = this
+                alert(input2.value)
+            }
+
+            changeWeather = () => {
+                const { isHot } = this.state
+                this.setState({ isHot: !isHot })
+            }
+            // ref的回调函数必须有参数，参数就是标签自己。
+            showInfo = (currentNode) => {
+                this.input1 = currentNode
+                console.log('@', currentNode)
+            }
+
+            render() {
+                const { isHot } = this.state
+                return (
+                    <div>
+                        <h2>今天的天气很{isHot ? '炎热' : '凉爽'}</h2>
+                        <input ref={this.myRef} type="text" placeholder="点击右侧按钮显示数据" /><br />
+                        <button onClick={this.showData}>点击我显示左侧数据</button>
+                    </div>
+                )
+            }
+        }
+
+        // 渲染组件到页面
+        ReactDOM.render(<Demo />, document.getElementById('test'))
+    </script>
+
+</html>

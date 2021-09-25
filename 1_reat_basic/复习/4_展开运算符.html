@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>js中的展开运算符</title>
+</head>
+
+<body>
+    <script type="text/javascript">
+        let l1 = [1, 3, 5, 7, 9]
+        let l2 = [0, 2, 4, 6, 8]
+
+        console.log(...l1)  // 展开数组
+        console.log([...l2, ...l1]) // 合并两个数组
+
+        // 在函数中使用，可以接收多个参数（想Python中的*）
+        function sum(...number) {
+            return number.reduce((preValue, currentValue) => {  // reduce方法，累计运算
+                return preValue + currentValue
+            })
+        }
+        console.log(sum(1, 2, 3, 4, 5))
+
+        // 构造字面量对象时使用展开语法
+        let p1 = { name: "Tom", age: 20, sex: "男" }
+        // console(...p1)  // 对象不可展开
+        // 赋值，复制对象
+        let p2 = p1
+        p1.name = "Joe"
+        console.log(p2) // 赋值只是增加引用，并不能复制
+
+        let p3 = { ...p1 }
+        p1.name = 'Jack'
+        console.log('p3', p3)
+
+        // 合并
+        let p4 = { ...p3, name: 'Jimmy', address: '上海' }
+        console.log('p4', p4)
+    </script>
+</body>
+
+</html>

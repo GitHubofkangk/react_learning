@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>2_受控组件 </title>
+</head>
+
+<body>
+
+    <!-- 准备好的一个“容器”。 -->
+    <div id="test"></div>
+
+    <!-- 引入react核心库 -->
+    <script type="text/javascript" src="../js/react.development.js"></script>
+    <!-- 引入react-dom, 用于支持操作虚拟DOM -->
+    <script type="text/javascript" src="../js/react-dom.development.js"></script>
+    <!-- 引入babel，用于将jsx转换为js -->
+    <script type="text/javascript" src="../js/babel.min.js"></script>
+
+    <!-- jsx脚本 -->
+    <script type="text/babel">
+        // 创建组件
+        class Login extends React.Component {
+            // 受控组件，直接过去输入型标签中的数据保存到state中
+            // 创建state
+            state = { username: '', password: '' }
+
+            // 处理表单提交
+            handleSubmit = (event) => {
+                event.preventDefault()
+                // console.log(this.state)
+            }
+
+            // 实时保存用户名
+            savaUsername = (event) => {
+                this.setState({ username: event.target.value })
+                // console.log(this.state)
+            }
+            // 实时保存密码
+            savePassword = (event) => {
+                this.setState({ password: event.target.value })
+                // console.log(this.state)
+            }
+
+            render() {
+                return (
+                    <form action="https://www.lmcoding.cn" onSubmit={this.handleSubmit}>
+                        {/*onChange当标签发生改变时，调用该回调函数*/}
+                        用户名：<input onChange={this.savaUsername} type="text" name="username" />
+                        密码：<input onChange={this.savePassword} type="password" name="password" />
+                        <button>登录</button>
+                    </form>
+                )
+            }
+        }
+        // 渲染
+        ReactDOM.render(<Login />, document.getElementById('test'))
+    </script>
+
+</html>

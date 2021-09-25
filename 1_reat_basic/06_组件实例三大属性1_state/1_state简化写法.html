@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title></title>
+</head>
+
+<body>
+
+    <!-- 准备好的一个“容器”。 -->
+    <div id="test"></div>
+
+    <!-- 引入react核心库 -->
+    <script type="text/javascript" src="../js/react.development.js"></script>
+    <!-- 引入react-dom, 用于支持操作虚拟DOM -->
+    <script type="text/javascript" src="../js/react-dom.development.js"></script>
+    <!-- 引入babel，用于将jsx转换为js -->
+    <script type="text/javascript" src="../js/babel.min.js"></script>
+
+    <!-- jsx脚本 -->
+    <script type="text/babel">
+        //1. 创建类组件
+        class Weather extends React.Component{
+            // constructor(props){ 
+            //     super(props)
+            //     this.state = {isHot:true,wind:'微风'}
+            // }
+
+            // 直接在类里创建实例属性
+            state = {isHot:true, wind:'微风'}
+
+            render(){
+                return <h1 onClick={this.changeWeather}>今天天气很{this.state.isHot?'炎热':'凉爽'}，{this.state.wind}</h1>
+                // onClick={this.changeWeather}只是增加引用，并不是通过实例调用的。
+            }
+
+            // 也将changeWeather改为实例属性，并将箭头函数赋值给changeWeather。（箭头函数中的this，会就近寻找）
+            changeWeather = ()=>{
+                const isHot = this.state.isHot
+                const wind = this.state.wind
+                this.setState({isHot:!isHot,wind:'大风'})
+
+            }
+        }
+        //2. 渲染
+        ReactDOM.render(<Weather/>, document.getElementById('test'))
+    </script>
+</body>
+</html>

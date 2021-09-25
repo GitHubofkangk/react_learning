@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>2_修改props的值</title>
+</head>
+
+<body>
+
+    <!-- 准备好的一个“容器”。 -->
+    <div id="test1"></div>
+    <div id="test2"></div>
+    <div id="test3"></div>
+    <!-- 引入react核心库 ，全局多了一个React对象-->
+    <script type="text/javascript" src="../js/react.development.js"></script>
+    <!-- 引入react-dom, 用于支持操作虚拟DOM，全局多了一个ReactDOM对象 -->
+    <script type="text/javascript" src="../js/react-dom.development.js"></script>
+    <!-- 引入babel，用于将jsx转换为js -->
+    <script type="text/javascript" src="../js/babel.min.js"></script>
+    <!-- 引入prop-types，用于对组件标签属性进行限制 ，全局多了一个PropTypes对象-->
+    <script type="text/javascript" src="../js/prop-types.js"></script>
+
+
+    <!-- jsx脚本 -->
+    <script type="text/babel">
+        // 创建类组件
+        class Person extends React.Component {
+            render() {
+                const { name, age, sex } = this.props
+
+                /* 这么写的问题：
+                1. 限制标签属性的类型
+                2. 不传入的数据，就无法展示
+                */
+                return (
+                    <ul>
+                        <li>姓名：{name}</li>
+                        <li>性别：{sex}</li>
+                        <li>年龄：{age + 1}</li>
+                    </ul>
+                )
+            }
+
+
+        }
+
+
+        // 渲染到页面
+        ReactDOM.render(<Person name="John Doe" age={18} sex="男" />, document.getElementById('test1'))
+
+        // const p = { name: 100, age: 20, sex: '女' }  // 传入非字符串，直接报错
+        // 40行的语法糖，必须注意命名一致
+        // ReactDOM.render(<Person {...p} />, document.getElementById('test2'))
+        ReactDOM.render(<Person name="Jack" age={18} sex="女" speak={speak} />, document.getElementById('test3'))
+
+        function speak() {
+            console.log('我说话了')
+        }
+    </script>
+</body>
+
+</html>

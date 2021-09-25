@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>3_对props进行限制</title>
+</head>
+
+<body>
+
+    <!-- 准备好的一个“容器”。 -->
+    <div id="test1"></div>
+    <div id="test2"></div>
+    <div id="test3"></div>
+    <!-- 引入react核心库 -->
+    <script type="text/javascript" src="../js/react.development.js"></script>
+    <!-- 引入react-dom, 用于支持操作虚拟DOM -->
+    <script type="text/javascript" src="../js/react-dom.development.js"></script>
+    <!-- 引入babel，用于将jsx转换为js -->
+    <script type="text/javascript" src="../js/babel.min.js"></script>
+    <!-- 引入prop-types，用于对组件标签属性进行限制 ，全局多了一个PropTypes对象-->
+    <script type="text/javascript" src="../js/prop-types.js"></script>
+
+    <!-- jsx脚本 -->
+    <script type="text/babel">
+        // 创建类组件
+        class Person extends React.Component {
+            render() {
+                const { name, age, sex } = this.props
+                // props是只读的
+                // this.props.name = "Tom" // 此行代码会报错，因为props是只读的
+                return (
+                    <ul>
+                        <li>姓名：{name}</li>
+                        <li>性别：{sex}</li>
+                        <li>年龄：{age + 1}</li>
+                    </ul>
+                )
+            }
+        }
+        // 对标签属性进行类型，必要性的限制
+        Person.propTypes = {
+            name: PropTypes.string.isRequired,  //限制name为必传，且为字符串
+            sex: PropTypes.string,             //限制nsex为字符串，未要求必传
+            age: PropTypes.number,             //限制age为数字
+            speak: PropTypes.func              //限制speak为函数
+        }
+        // 指定默认的标签属性值
+        Person.defaultProps = {
+            sex: '不男不女',                // sex的默认为男
+            age: 18                        // age默认值为18
+        }
+        // 渲染到页面
+        // 这里的age后面是字符串，所以变成181
+        // 但是这里不能直接写age=18，因为不符合html语法。
+        ReactDOM.render(<Person name="John Doe" age="18" sex="男" />, document.getElementById('test1'))
+
+        // 批量传递props/标签属性
+        // 这里的age后面是数字，所以能实现+1
+        const p = { name: 'John Doe', age: 20, sex: '女' }
+        // 40行的语法糖，必须注意命名一致
+        ReactDOM.render(<Person {...p} />, document.getElementById('test2'))
+
+        // 只有js才会涉及变量类型，所以要将value变为数字，需要加{}
+        ReactDOM.render(<Person name="Jack" age={18} sex="女" />, document.getElementById('test3'))
+
+
+    </script>
+</body>
+
+</html>

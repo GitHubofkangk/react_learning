@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>2_不使用柯里化实现</title>
+</head>
+
+<body>
+
+    <!-- 准备好的一个“容器”。 -->
+    <div id="test"></div>
+
+    <!-- 引入react核心库 -->
+    <script type="text/javascript" src="../js/react.development.js"></script>
+    <!-- 引入react-dom, 用于支持操作虚拟DOM -->
+    <script type="text/javascript" src="../js/react-dom.development.js"></script>
+    <!-- 引入babel，用于将jsx转换为js -->
+    <script type="text/javascript" src="../js/babel.min.js"></script>
+
+    <!-- jsx脚本 -->
+    <script type="text/babel">
+        // 创建组件
+        class Login extends React.Component {
+            // 初始化state
+            state = { username: '', password: '' }
+            // 不是柯里化函数
+            saveInfo = (dateType, event) => {
+                this.setState({ [dateType]: event.target.value })
+            }
+
+            // 处理提交
+            handleSubmit = (event) => {
+                event.preventDefault()
+            }
+            render() {
+                return (
+                    <form onSubmit={this.handleSubmit}>
+                        用户名：<input onChange={(event) => { this.saveInfo('username', event) }} type="text" />
+                        密码：<input onChange={(event) => { this.saveInfo('password', event) }} type="password" />
+                        <button>登录</button>
+                    </form>
+                )
+            }
+        }
+
+        // 渲染组件到页面
+        ReactDOM.render(<Login />, document.getElementById('test'))
+    </script>
+
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!-- 引入react核心库 -->
+    <script type="text/javascript" src="../js/17.0.1/react.development.js"></script>
+    <!-- 引入react-dom, 用于支持操作虚拟DOM -->
+    <script type="text/javascript" src="../js/17.0.1/react-dom.development.js"></script>
+    <!-- 引入babel，用于将jsx转换为js -->
+    <script type="text/javascript" src="../js/17.0.1/babel.min.js"></script>
+
+    <title>1_验证Diffing算法</title>
+</head>
+
+<body>
+    <!-- 准备好的一个“容器”。 -->
+    <div id="test"></div>
+
+    <!-- jsx脚本 -->
+    <script type="text/babel">
+        // 创建组件
+        class Timer extends React.Component {
+            state = { date: new Date() }
+
+            componentDidMount() {
+                setInterval(() => {
+                    // 更新状态
+                    this.setState({ date: new Date() })
+                }, 1000)
+            }
+
+
+            render() {
+                return (
+                    <div>
+                        <h2>Hello</h2>
+                        输入框1：<input type="text" /><br />
+                        <span>
+                            现在的时间是：{this.state.date.toString()}
+                            <br />输入框2：<input type="text" />
+                        </span>
+                    </div>
+                )
+            }
+        }
+
+        // 渲染组件
+        ReactDOM.render(<Timer />, document.getElementById('test'))
+    </script>
+</body>

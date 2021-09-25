@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title></title>
+</head>
+
+<body>
+
+    <!-- 准备好的一个“容器”。 -->
+    <div id="test"></div>
+
+    <!-- 引入react核心库 -->
+    <script type="text/javascript" src="../js/react.development.js"></script>
+    <!-- 引入react-dom, 用于支持操作虚拟DOM -->
+    <script type="text/javascript" src="../js/react-dom.development.js"></script>
+    <!-- 引入babel，用于将jsx转换为js -->
+    <script type="text/javascript" src="../js/babel.min.js"></script>
+
+    <!-- jsx脚本 -->
+    <script type="text/babel">
+        //1. 创建类组件
+        class Weather extends React.Component{
+            constructor(props){ 
+                super(props)
+                //初始化状态
+                //构造器中的this一定是指实例
+                this.state = {isHot:true,wind:'微风'}
+            }
+            render(){
+                // render是通过实例调用的，所以render中的this也是指实例。
+                console.log(this) 
+                //读取状态
+                //注意在react中如何绑定事件
+                return <h1 onClick={this.changeWeather}>今天天气很{this.state.isHot?'炎热':'凉爽'}</h1>
+                // onClick={this.changeWeather}只是增加引用，并不是通过实例调用的。
+            }
+            changeWeather(){
+                //changeWeather放在哪里？ —— Weather的原型上实例对象上
+                //由于changeWeather是作为onClick的回调，所以不是通过实例调用的，
+                // 而是直接调用（由于类方法开启局部严格模式，所以this是undefined）
+                console.log(this)
+            }
+        }
+        //2. 渲染
+        ReactDOM.render(<Weather/>, document.getElementById('test'))
+        //如果h1有属性，也可以使用前两种绑定点击事件的方式
+        // const btn = document.getElementById('title')
+        // btn.addEventListener('click',()=>{
+        //     console.log('标题被点击了')
+        // })
+
+        // const btn = document.getElementById('title')
+        // btn.onclick = () => {
+        //     console.log('标题被点击了')
+        // }
+        // 用使用第三种方法时，要使用onClick，并将函数名赋值给onClick
+        // function changeWeather(){   //放在这里，不方便访问isHot属性
+        //     alert('标题被点击了')
+        // }
+    </script>
+</body>
+</html>

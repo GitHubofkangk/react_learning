@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>事件处理</title>
+</head>
+
+<body>
+
+    <!-- 准备好的一个“容器”。 -->
+    <div id="test"></div>
+
+    <!-- 引入react核心库 -->
+    <script type="text/javascript" src="../js/react.development.js"></script>
+    <!-- 引入react-dom, 用于支持操作虚拟DOM -->
+    <script type="text/javascript" src="../js/react-dom.development.js"></script>
+    <!-- 引入babel，用于将jsx转换为js -->
+    <script type="text/javascript" src="../js/babel.min.js"></script>
+
+    <!-- jsx脚本 -->
+    <script type="text/babel">
+        // 创建类组件
+        class Demo extends React.Component {
+            /*
+                (1).通过onXxx属性指定事件处理函数(注意大小写)
+                        a.React使用的是自定义(合成)事件, 而不是使用的原生DOM事件 —————— 为了更好的兼容性
+                        b.React中的事件是通过事件委托方式处理的(委托给组件最外层的元素) ————————为了的高效
+                (2).通过event.target得到发生事件的DOM元素对象 ——————————不要过度使用ref
+                        对于事件发生是自己的情况，不需要使用ref，使用用event
+             */
+
+            // 使用createRef创建ref
+            myRef = React.createRef()
+
+            showDate = () => {
+                alert(this.myRef.current.value)
+            }
+
+            showInfo = (event) => {
+                alert(event.target.value)
+            }
+
+            render() {
+                return (
+                    <div>
+                        <input ref={this.myRef} type="text" /><br />
+                        <button onClick={this.showDate}>点击我</button><br />
+                        <input onBlur={this.showInfo} type="text" /><br />
+                    </div>
+                )
+            }
+        }
+
+        // 渲染到页面
+        ReactDOM.render(<Demo />, document.getElementById('test'))
+    </script>
+
+</html>

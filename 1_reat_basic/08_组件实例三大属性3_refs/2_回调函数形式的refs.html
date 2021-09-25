@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>2_回调函数形式的refs</title>
+</head>
+
+<body>
+
+    <!-- 准备好的一个“容器”。 -->
+    <div id="test"></div>
+
+    <!-- 引入react核心库 -->
+    <script type="text/javascript" src="../js/react.development.js"></script>
+    <!-- 引入react-dom, 用于支持操作虚拟DOM -->
+    <script type="text/javascript" src="../js/react-dom.development.js"></script>
+    <!-- 引入babel，用于将jsx转换为js -->
+    <script type="text/javascript" src="../js/babel.min.js"></script>
+
+    <!-- jsx脚本 -->
+    <script type="text/babel">
+        // 创建组件
+        class Demo extends React.Component {
+            // 点击右侧按钮显示数据
+            showData = () => {
+                const { input1 } = this   // 获取对象input1
+                alert(input1.value)
+            }
+
+            // 失去焦点显示数据
+            showData2 = () => {
+                const { input2 } = this
+                alert(input2.value)
+            }
+            // 字符型形式的refs不推荐，因为效率不高，后面版本可能会弃用。
+            // 除了字符串形式，还有回调函数形式、createRefs
+            render() {
+                return (
+                    <div>
+                        <input ref={(c) => { this.input1 = c }} type="text" placeholder="点击右侧按钮显示数据" />&nbsp;
+                        <button onClick={this.showData}>点击我显示左侧数据</button>&nbsp;
+                        <input ref={c => this.input2 = c} onBlur={this.showData2} type="text" placeholder="失去焦点显示数据" />
+                    </div>
+                )
+            }
+        }
+        /*
+        ref后面直接跟回调函数：
+            回调函数：
+                1. 自定创建
+                2. 自己不调用
+                3. 参数由调用者给出
+            不调用（无()）的箭头函数，如果参数只有一个，则可以省略()，如果只有一个语句，则可以省略{}
+        */
+
+        // 渲染组件到页面
+        ReactDOM.render(<Demo />, document.getElementById('test'))
+    </script>
+
+</html>
